@@ -27,6 +27,8 @@ solve board = board
 -- | 'display' function to convert a SudokuBoard to String representation
 display :: SudokuBoard -> String
 display board = ""
+-- COMMENTED OUT DISPLAY OF BOARD BASED ON FUNCTION
+-- THIS DOESN'T COMPILE AND IT'S ACTUALLY PRETTY UGLY, BUT I THINK THE ISSUE IS JUST HORRIBLE SYNTAX
 {-| display board = displaySpace (board "" 1 1)
 
 -- | 'displaySpace' function to convert a SudokuBoard to String representation
