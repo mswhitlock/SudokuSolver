@@ -1,24 +1,30 @@
 module Main where
 
+import Data.Array
 import Data.Array.IO
+import Data.Char
+import Data.Maybe
 
-type SudokuBoard = [[Maybe Integer]]
+type SudokuBoard = Array (Int, Int) (Maybe Int)
 -- type SudokuBoard = (Integer, Integer) -> Maybe Integer COMMENTED OUT ALTERNATE TYPE
 
-
 main::IO()
-main = do
-    contents <- getContents
-    print $ display $ solve $ initBoard nothingBoard contents
-    
--- | 'nothing board' function creates a 9x9 board filled with Nothing
-nothingBoard :: SudokuBoard
-nothingBoard = map (\x -> map (\y -> (Nothing)) [1..9]) [1..9]
--- nothingBoard (x, y) = Nothing //COMMENTED OUT ROUGHLY WHAT THIS WOULD LOOK LIKE (by that, I mean it compiled okay)
+main = interact (display . solve . initBoard)
 
--- | 'initBoard' function takes empty board and file contents and returns the initialized board (TO BE IMPLEMENTED) 
-initBoard :: SudokuBoard -> String -> SudokuBoard
-initBoard board str = board
+-- | 'setBoardTile' function takes a given SudokuBoard, a coordinate, and an number and returns a new SudokuBoard with the given number at the given Coordinate
+--setBoardTile :: SudokuBoard -> (Integer, Integer) -> Integer -> SudokuBoard
+--setBoardTile b (x, y) i = b//[(x, y), i]
+
+-- | 'initBoard' function takes empty board and file contents and returns the initialized board
+initBoard :: String -> SudokuBoard
+initBoard str = array ((1,1), (9,9)) [((x, y), value) | x <- [1..9]
+                                                      , y <- [1..9]
+                                                      , let value = toMaybeInt $ lines str !! (y - 1) !! (x - 1)]
+
+toMaybeInt :: Char -> Maybe Int
+toMaybeInt c | isDigit c = Just (read [c])
+             | c == ' '  = Nothing
+             | otherwise = error "Invalid input board"
 
 -- | 'solve' function takes initialized board and returns the solved board (TO BE IMPLEMENTED) 
 solve :: SudokuBoard -> SudokuBoard
